@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountControllers {
 
-	@GetMapping("sayHello")
-	public String sayHello() {
+    @GetMapping("sayHello")
+    public String sayHello() {
 
-		return "hi World";
-	}
+        return "hi World";
+    }
 }
