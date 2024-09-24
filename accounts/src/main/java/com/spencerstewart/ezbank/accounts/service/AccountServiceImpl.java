@@ -4,12 +4,14 @@ import com.spencerstewart.ezbank.accounts.constants.AccountConstant;
 import com.spencerstewart.ezbank.accounts.dto.CustomerDto;
 import com.spencerstewart.ezbank.accounts.entity.Account;
 import com.spencerstewart.ezbank.accounts.entity.Customer;
+import com.spencerstewart.ezbank.accounts.exception.CustomerAlreadyExistsException;
 import com.spencerstewart.ezbank.accounts.mapper.CustomerMapper;
 import com.spencerstewart.ezbank.accounts.repository.AccountRepository;
 import com.spencerstewart.ezbank.accounts.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -23,6 +25,14 @@ public class AccountServiceImpl implements AccountService {
 	public void createAccount(CustomerDto customerDto) {
 
 		Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
+
+		Optional<Customer> optionalCustomer =
+				customerRepository.findByMobileNumber(customerDto.getMobileNumber());
+		if (optionalCustomer.isPresent()) {
+			throw new CustomerAlreadyExistsException("Customer already registered with given " +
+					"mobile number " + customerDto.getMobileNumber());
+		}
+
 		Customer savedCustomer = customerRepository.save(customer);
 		accountRepository.save(createNewAccount(savedCustomer));
 	}
