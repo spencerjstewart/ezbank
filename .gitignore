@@ -1,2 +1,4 @@
 /.idea/
 /accounts/target/
+/accounts/src/codebase.txt
+/accounts/src/generate_codebase_dump.py
